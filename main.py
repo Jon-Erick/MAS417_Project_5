@@ -1,6 +1,8 @@
 import pandas as pd
 import requests
 from datetime import datetime
+import pprint
+import json
 
 # Insert Client ID
 api_key = '8ZIXHqsf0U9veOXecYhRM7NX2QTMQEeM5ogwJOw6'
@@ -12,6 +14,8 @@ api_key = '8ZIXHqsf0U9veOXecYhRM7NX2QTMQEeM5ogwJOw6'
 ''' Maybe include input as a ticker and make the function use the input ticker'''
 
 def getApiData(ticker):
+    # Input is stock ticker to required company
+    # Retrieve and collect data from YahooFinance API
     querystring = {
         "symbols": ticker,
         "lang": "en",
@@ -23,7 +27,6 @@ def getApiData(ticker):
     headers = {'x-api-key': api_key}
 
     # HTTPS request
-    # response = requests.get("GET", url, headers=headers, params=querystring)
     response = requests.get(url, params=querystring, headers=headers)
     json = response.json()
 
@@ -40,20 +43,31 @@ def getApiData(ticker):
         print('Reason: %s' % json['error']['reason'])
 
 # def getDataValues():
-test = getApiData('AAPL')
+test = getApiData('MSFT')
 
 
-print('This is a test')
+# Include a function to verify that the elements actually exists
 
-df = pd.json_normalize(test)
-print(df)
+print(test['result'])
+print(test['result'][0]['summaryDetail']['previousClose']['raw'])
+print(type(test))
 
-'''
-df = pd.DataFrame(test)
-for i in range(len(data)):
-    row = pd.DataFrame(data[i][])
-print(df)
-'''
+# https://docs.python.org/3/library/pprint.html
+# test.insert(0, test[:])
+# Pretty print of json data
+pp = pprint.PrettyPrinter(indent=2, compact=True, sort_dicts=True)
+pp.pprint(test)
+
+# 50 day average
+print(test['result'][0]['summaryDetail']['fiftyDayAverage']['raw'])
+# dayHigh
+print(test['result'][0]['summaryDetail']['dayHigh']['raw'])
+
+df = pd.read_json(test)
+
+print(df.to_string())
+
+
 '''
 df = pd.DataFrame(data)
 columns = ['previousClose', 'open', 'dayLow', 'dayHigh', 'dividendRate', 'dividendYield',
@@ -87,4 +101,3 @@ if "dayHigh": > "fiftyDayAverage":
  else
  print('bear')
 '''
-
