@@ -2,4 +2,4 @@
 
 Required installed packages: "pandas" and "requests"
 
-Required packages for STL_image file: "pillow", "stl", "numpy" and "matplotlib"
+Required packages for STL_image file: "pillow", "numpy-stl", "numpy" and "matplotlib"
