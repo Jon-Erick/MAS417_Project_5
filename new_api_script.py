@@ -30,6 +30,10 @@ def getApiData(ticker):
     response = requests.get(url, params=querystring, headers=headers)
     json = response.json()
 
+    f = open('jsonfile.txt', 'w')
+    f.write(response.text)
+    f.close()
+
     # Verify data gathering
     if response.status_code == 200:
         print('Returned status code %s' % response.status_code)
@@ -43,16 +47,17 @@ def getApiData(ticker):
         print('Reason: %s' % json['error']['reason'])
 
 # def getDataValues():
-test1 = getApiData('MSFT')
+#test1 = getApiData('MSFT')
+print(type(test1))
 # get file to avoid calling API during development
 
-createFile = open('jsonfile.txt','w')
-f = open('jsonfile.txt','a')
-test = open('jsonfile.txt','w')
+test = open()
 
+
+'''
 pp = pprint.PrettyPrinter(indent=2, compact=True, sort_dicts=True)
 pp.pprint(test)
-
+'''
 print(test)
 # Include a function to verify that the elements actually exists
 
