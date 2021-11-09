@@ -50,12 +50,12 @@ def getApiData(ticker):
 #test1 = getApiData('MSFT')
 # get file to avoid calling API during development
 
-test = open()
 
 
 '''
 pp = pprint.PrettyPrinter(indent=2, compact=True, sort_dicts=True)
 pp.pprint(test)
+'''
 '''
 print(test)
 # Include a function to verify that the elements actually exists
@@ -63,7 +63,7 @@ print(test)
 print(test['result'])
 print(test['result'][0]['summaryDetail']['previousClose']['raw'])
 print(type(test))
-
+'''
 # https://docs.python.org/3/library/pprint.html
 # test.insert(0, test[:])
 # Pretty print of json data
