@@ -48,7 +48,6 @@ def getApiData(ticker):
 
 # def getDataValues():
 #test1 = getApiData('MSFT')
-print(type(test1))
 # get file to avoid calling API during development
 
 test = open()
