@@ -24,6 +24,8 @@ gray_Bear = Image.open('Bear-Emblem.jpg').convert('L')
 #plt.imshow(gray_Bear)
 #plt.show()
 
+##############################################################
+
 #create surface with 1000 x 5000 with N triangles
 max_size = (500, 500)
 max_height = 10
@@ -33,6 +35,7 @@ min_height = 0
 #height=maxHeight for maxPix
 
 ###############################################################
+
 #Create the Bull STL file
 gray_Bull.thumbnail(max_size)
 
@@ -84,4 +87,59 @@ for i, f in enumerate(facesBull):
         surface.vectors[i][j] = facesNpBull[i][j]
 # Write the mesh to file "cube.stl"
 surface.save('Bull.stl')
+print(surface)
+
+########################################################################
+
+#Create the Bear STL file
+gray_Bear.thumbnail(max_size)
+
+imageNp2 = np.array(gray_Bear)
+maxPix = imageNp2.max()
+minPix = imageNp2.min()
+
+#print(imageNp2)
+(ncols, nrows) = gray_Bear.size
+
+verticesBear = np.zeros((nrows, ncols, 3))
+
+for x in range(0, ncols):
+    for y in range(0, nrows):
+        pixelIntensity2 = imageNp2[y][x]
+        z = (pixelIntensity2 * (-max_height)) / 229
+
+        #print(imageNp1[y][x])
+        verticesBear[y][x] = (x, y, z)
+
+facesBear = []
+
+for x in range(0, ncols - 1):
+    for y in range(0, nrows - 1):
+        #create face 1
+        vertice1Bear = verticesBear[y][x]
+        vertice2Bear = verticesBear[y + 1][x]
+        vertice3Bear = verticesBear[y + 1][x + 1]
+
+        face1Bear = np.array([vertice1Bear, vertice2Bear, vertice3Bear])
+
+        #create face 2
+        vertice1Bear = verticesBear[y][x]
+        vertice2Bear = verticesBear[y][x + 1]
+        vertice3Bear = verticesBear[y + 1][x + 1]
+
+        face2Bear = np.array([vertice1Bear, vertice2Bear, vertice3Bear])
+
+        facesBear.append(face1Bear)
+        facesBear.append(face2Bear)
+
+print(f"number of faces: {len(facesBear)}")
+facesNpBear = np.array(facesBear)
+
+# Create the mesh for Bear
+surface = mesh.Mesh(np.zeros(facesNpBear.shape[0], dtype=mesh.Mesh.dtype))
+for i, f in enumerate(facesBear):
+    for j in range(3):
+        surface.vectors[i][j] = facesNpBear[i][j]
+# Write the mesh to file "cube.stl"
+surface.save('Bear.stl')
 print(surface)
