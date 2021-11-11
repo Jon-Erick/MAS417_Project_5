@@ -7,6 +7,7 @@ api_key = '8ZIXHqsf0U9veOXecYhRM7NX2QTMQEeM5ogwJOw6'
 print('What company, what to compare')
 print('all the possible value: dayHigh compared to fifty day average ')
 
+
 class GetRichorDieTrying:
 
     def __init__(self):
@@ -28,18 +29,18 @@ class GetRichorDieTrying:
 
         # HTTPS request
         # requests library
-        Response = requests.get(url, params=querystring, headers=headers)
+        response = requests.get(url, params=querystring, headers=headers)
         # format data to json
-        file = Response.json()
+        file = response.json()
         # Exception handling
-        if Response.status_code == 200:
-            print('Returned status code %s' % Response.status_code)
+        if response.status_code == 200:
+            print('Returned status code %s' % response.status_code)
             print('Data retrieved from yahoofinance!')
             # retrieved json-file
             data = file['quoteSummary']
             return data
         else:
-            print('Error! Returned status code %s' % Response.status_code)
+            print('Error! Returned status code %s' % response.status_code)
             print('Message: %s' % file['error']['message'])
             print('Reason: %s' % file['error']['reason'])
             quit()
