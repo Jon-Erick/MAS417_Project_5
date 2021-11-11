@@ -32,7 +32,7 @@ class GetRichorDieTrying:
         # format data to json
         file = Response.json()
         # Exception handling
-        if Response.status_code == 200
+        if Response.status_code == 200:
             print('Returned status code %s' % Response.status_code)
             print('Data retrieved from yahoofinance!')
             # retrieved json-file
@@ -66,17 +66,25 @@ class GetRichorDieTrying:
 
 abc = GetRichorDieTrying()
 print(abc)
-print(abc.getApiData('AAPL'))
+print(abc.getApiData('M123'))
+
+
+# Make a test to verify if the recieved dict includes error or not. Expanding the getApiData exception handling.!!
+# def checkDataOutput(output):
+  #  if ['result'][0] == 'None' not output:
+        # pass
+
+# Exception handling for input. Verify string, not int or wrong ticker
+# def checkInput(ticker):
+    # if ticker == string # and valid ticker
+        # pass
 
 
 
-'''
+# print('dayHigh,fiftyDayAverage, chogi chogi.....')
+# print('first value to compare')
 
-print('dayHigh,fiftyDayAverage, chogi chogi.....')
-print('first value to compare')
-
-b = abc.getCompanyValues(a,'dayHigh')
-c = abc.getCompanyValues(a,'fiftyDayAverage')
-d = abc.getTrend(b,c)
-e = abc.printData(a)
-'''
+#b = abc.getCompanyValues(a,'dayHigh')
+#c = abc.getCompanyValues(a,'fiftyDayAverage')
+#d = abc.getTrend(b,c)
+#e = abc.printData(a)
