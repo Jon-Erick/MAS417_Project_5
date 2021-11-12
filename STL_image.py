@@ -3,11 +3,17 @@ from PIL import Image
 import numpy as np
 from stl import mesh
 
+# Import the output percentage change from the new_api_scipt to use as the input in BullOrBear
+from new_api_script import d
+
+print('2nd script')
+print(d)
+print('2nd script continues')
 # Return Bull or Bear
 # Choosing which image to process
 # Input is the output from the API-script
-def bullOrBear(inputAPI):
-    if inputAPI > 0:
+def bullOrBear(d):
+    if d > 0:
         return 'Bull'
     else:
         return 'Bear'
