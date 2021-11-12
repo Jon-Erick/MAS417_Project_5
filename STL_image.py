@@ -1,145 +1,114 @@
-# Image download and Grayscape
-#package needed
+# Required packages
 from PIL import Image
-import matplotlib.pyplot as plt
 import numpy as np
 from stl import mesh
 
-#download BULL image, test to see it works
-im1 = Image.open("Chicago-Bulls-Emblem.jpg")
-#plt.imshow(im1)
-#plt.show()
+# Return Bull or Bear
+# Choosing which image to process
+# Input is the output from the API-script
+def bullOrBear(inputAPI):
+    if inputAPI > 0:
+        return 'Bull'
+    else:
+        return 'Bear'
 
-#download Bear image, test to see it works
-im2 = Image.open("Bear-Emblem.jpg")
-#plt.imshow(im2)
-#plt.show()
 
-#grayscale images
-gray_Bull = Image.open('Chicago-Bulls-Emblem.jpg').convert('L')
-#plt.imshow(gray_Bull)
-#plt.show()
+# Return greyscale of image
+# Input is the image choice from bullOrBear
+def greyScaleImage(input):
+    if input == 'Bull':
+        image = Image.open('Chicago-Bulls-Emblem.jpg').convert('L')
+        return image
+    else:
+        image = Image.open("Bear-Emblem.jpg").convert('L')
+        return image
 
-gray_Bear = Image.open('Bear-Emblem.jpg').convert('L')
-#plt.imshow(gray_Bear)
-#plt.show()
 
-##############################################################
+# return xyz matrix to process "vertice","col" and "row"
+# Create a xyz matrix for image
+# Input is the greyscale image
+def createImageMatrix(imageInput):
+    # create surface with 1000 x 5000 with N triangles
+    max_size = (500, 500)
+    max_height = 20  # Maybe make the max height a dynamical changed parameter respected to the percentage outout from the stock
+    min_height = 0
 
-#create surface with 1000 x 5000 with N triangles
-max_size = (500, 500)
-max_height = 10
-min_height = 0
+    # Thumbnail rescales image to a workable size
+    imageInput.thumbnail(max_size)
 
-#height = 0 for minPix
-#height=maxHeight for maxPix
+    # Creates a NumPy array to process the image
+    imageNP = np.array(imageInput)
+    maxPix = imageNP.max()
+    minPix = imageNP.min()
 
-###############################################################
+    # Define size of matrix to process
+    (col, row) = imageInput.size
 
-#Create the Bull STL file
-gray_Bull.thumbnail(max_size)
+    # Create a 3x3 matrix with zeroes
+    vertice = np.zeros((row, col, 3))
 
-imageNp1 = np.array(gray_Bull)
-maxPix = imageNp1.max()
-minPix = imageNp1.min()
+    for x in range(col):
+        for y in range(0, row):
+            pixelIntensity = imageNP[y][x]
+            z = (pixelIntensity * max_height) / 229
 
-#print(imageNp1)
-(ncols, nrows) = gray_Bull.size
+            vertice[y][x] = (x, y, z)
 
-verticesBull = np.zeros((nrows, ncols, 3))
+    return [vertice, col, row]
 
-for x in range(0, ncols):
-    for y in range(0, nrows):
-        pixelIntensity1 = imageNp1[y][x]
-        z = (pixelIntensity1 * max_height) / 229
 
-        #print(imageNp1[y][x])
-        verticesBull[y][x] = (x, y, z)
+# Return square vertice to build the xyz image
+# Creates triangles
+# Inputs are vertice, col and row generated in createImageMatrix
+def matrixProcessTriangles(verticeInput, colInput, rowInput):
+    faces = []
+    for x in range(0, colInput - 1):
+        for y in range(0, rowInput - 1):
+            # Create Face 1 triangle
+            vertice1 = verticeInput[y][x]
+            vertice2 = verticeInput[y + 1][x]
+            vertice3 = verticeInput[y + 1][x + 1]
 
-facesBull = []
+            face1 = np.array([vertice1, vertice2, vertice3])
 
-for x in range(0, ncols - 1):
-    for y in range(0, nrows - 1):
-        #create face 1
-        vertice1Bull = verticesBull[y][x]
-        vertice2Bull = verticesBull[y + 1][x]
-        vertice3Bull = verticesBull[y + 1][x + 1]
+            # Create Face 2 triangle
+            vertice1 = verticeInput[y][x]
+            vertice2 = verticeInput[y + 1][x]
+            vertice3 = verticeInput[y +1][x + 1]
 
-        face1Bull = np.array([vertice1Bull, vertice2Bull, vertice3Bull])
+            face2 = np.array([vertice1, vertice2, vertice3])
 
-        #create face 2
-        vertice1Bull = verticesBull[y][x]
-        vertice2Bull = verticesBull[y][x + 1]
-        vertice3Bull = verticesBull[y + 1][x + 1]
+            faces.append(face1)
+            faces.append(face2)
 
-        face2Bull = np.array([vertice1Bull, vertice2Bull, vertice3Bull])
+    # NumPy array with the created square face to build the image. triangle + triangle
+    facesNP = np.array(faces)
+    return [facesNP, faces]
 
-        facesBull.append(face1Bull)
-        facesBull.append(face2Bull)
 
-print(f"number of faces: {len(facesBull)}")
-facesNpBull = np.array(facesBull)
+# Return meshed image as STL-file
+# inputs are facesNP and faces from the matrixProcessTriangles functions
+# CREATE STL FILE
+def createSTLMesh(facesNPInput, facesInput):
+    surface = mesh.Mesh(np.zeros(facesNPInput.shape[0], dtype = mesh.Mesh.dtype))
+    for i, f in enumerate(facesInput):
+        for j in range(3):
+            surface.vectors[i][j] = facesNPInput[i][j]
 
-# Create the mesh for Bull
-surface = mesh.Mesh(np.zeros(facesNpBull.shape[0], dtype=mesh.Mesh.dtype))
-for i, f in enumerate(facesBull):
-    for j in range(3):
-        surface.vectors[i][j] = facesNpBull[i][j]
-# Write the mesh to file "cube.stl"
-surface.save('Bull.stl')
-print(surface)
+    # Write the mesh to file "cube.stl"
+    surface.save('image.stl')
+    return print("Saved STL-file as image.stl")
 
-########################################################################
+#########################
+####### TESTING #########
+#########################
 
-#Create the Bear STL file
-gray_Bear.thumbnail(max_size)
-
-imageNp2 = np.array(gray_Bear)
-maxPix = imageNp2.max()
-minPix = imageNp2.min()
-
-#print(imageNp2)
-(ncols, nrows) = gray_Bear.size
-
-verticesBear = np.zeros((nrows, ncols, 3))
-
-for x in range(0, ncols):
-    for y in range(0, nrows):
-        pixelIntensity2 = imageNp2[y][x]
-        z = (pixelIntensity2 * (-max_height)) / 229
-
-        #print(imageNp1[y][x])
-        verticesBear[y][x] = (x, y, z)
-
-facesBear = []
-
-for x in range(0, ncols - 1):
-    for y in range(0, nrows - 1):
-        #create face 1
-        vertice1Bear = verticesBear[y][x]
-        vertice2Bear = verticesBear[y + 1][x]
-        vertice3Bear = verticesBear[y + 1][x + 1]
-
-        face1Bear = np.array([vertice1Bear, vertice2Bear, vertice3Bear])
-
-        #create face 2
-        vertice1Bear = verticesBear[y][x]
-        vertice2Bear = verticesBear[y][x + 1]
-        vertice3Bear = verticesBear[y + 1][x + 1]
-
-        face2Bear = np.array([vertice1Bear, vertice2Bear, vertice3Bear])
-
-        facesBear.append(face1Bear)
-        facesBear.append(face2Bear)
-
-print(f"number of faces: {len(facesBear)}")
-facesNpBear = np.array(facesBear)
-
-# Create the mesh for Bear
-surface = mesh.Mesh(np.zeros(facesNpBear.shape[0], dtype=mesh.Mesh.dtype))
-for i, f in enumerate(facesBear):
-    for j in range(3):
-        surface.vectors[i][j] = facesNpBear[i][j]
-# Write the mesh to file "cube.stl"
-surface.save('Bear.stl')
-print(surface)
+aaa = bullOrBear(2)
+print(aaa)
+bbb = greyScaleImage(aaa)
+print(bbb)
+ccc = createImageMatrix(bbb)
+# print(ccc)
+ddd = matrixProcessTriangles(ccc[0], ccc[1], ccc[2])
+# print(ddd)
+eee = createSTLMesh(ddd[0], ddd[1])
