@@ -3,17 +3,12 @@ from PIL import Image
 import numpy as np
 from stl import mesh
 
-# Import the output percentage change from the new_api_scipt to use as the input in BullOrBear
-# from new_api_script import d
-
-
-
 
 # Return Bull or Bear
 # Choosing which image to process
 # Input is the output from the API-script
-def bullOrBear(d):
-    if d > 0:
+def bullOrBear(percentage):
+    if percentage > 0:
         return 'Bull'
     else:
         return 'Bear'
@@ -105,18 +100,3 @@ def createSTLMesh(facesNPInput, facesInput):
     # Write the mesh to file "cube.stl"
     surface.save('image.stl')
     return print("Saved STL-file as image.stl successfully")
-
-#########################
-####### TESTING #########
-#########################
-'''
-aaa = bullOrBear(-2)
-print(aaa)
-bbb = greyScaleImage(aaa)
-print(bbb)
-ccc = createImageMatrix(bbb)
-# print(ccc)
-ddd = matrixProcessTriangles(ccc[0], ccc[1], ccc[2])
-# print(ddd)
-eee = createSTLMesh(ddd[0], ddd[1])
-'''
