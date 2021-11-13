@@ -1,124 +1,86 @@
-import new_api_script
-import STL_image
 
 
-############################
-########## STEP 1 ##########
-############################
-
-print('Choose your preferred company to compare instrumental values')
-print("Insert company ticker, such as AAPL for Apple, or MSFT for Microsoft")
-ticker = input('')
-
-print(ticker)
-print(type(ticker))
-
-# function call getApiData
-# b = getApiData(ticker)
+import new_api_script as API
+import STL_image as IMG
+import ancillary_functions as AF
 
 
-############################
-########## STEP 2 ##########
-############################
-# Find a way to say what value to be compared to the other
+print('Do you want to run a default procedure?')
+default = AF.yesNo()
+
+if default == 'yes':
+
+    # Default
+
+    # API script
+    print('Gathering data from Microsoft')
+    data = API.GetRichorDieTrying.getApiData(1,'MSFT')
+    print('Comparing day high and fifty day average values')
+    value1 = API.GetRichorDieTrying.getCompanyValues(1, data, 'dayHigh')
+    value2 = API.GetRichorDieTrying.getCompanyValues(1, data, 'fiftyDayAverage')
+    trend = API.GetRichorDieTrying.getTrend(1, value1, value2)
+    print('day high:', value1, 'fifty day average:',  value2, 'percentage trend:', trend)
+    print('Printing data')
+    seedata = API.GetRichorDieTrying.printData(1,data)
 
 
-# Return requested key to compare data values
-# Input is data from getApiData
-# Checks for a valid key in data
-def chooseKey(data):
-    while True:
-        print('What instrumental values do you want to be compared to?')
-        print('Choose between: dayHigh, dayLow, open, fiftyDayAverage, fiftyTwoWeekHigh, fiftyTwoWeekLow, previousClose and twoHundredDayAverage')
-        key = input('')
-        if key not in data['result'][0]['summaryDetail']:
-            print('Please enter a valid key')
-            continue
-        else:
-            break
-    return key
-
-# Call chooseKey function to check for a valid
-# c = chooseKey(data)
-
-# Call function getCompanyValues for the first instrument key
-# d = getCompanyValues(data, c)
-
-############################
-########## STEP 3 ##########
-############################
-
-print('What instrumental value to you want to compare to?')
-print('Choose between: dayHigh, dayLow, open')
-
-# Call chooseKey function to check for a valid key
-# e = chooseKey(data)
-
-# Call function getCompanyValues for the second instrument
-# f = getCompanyValues(data, e)
+    # STL script
+    updown = IMG.bullOrBear(trend)
+    print('The trend is', updown)
+    print('Greyscaling', updown, 'image')
+    grey = IMG.greyScaleImage(updown)
+    print('Generating height map using trend amplitude')
+    matrix = IMG.createImageMatrix(grey, trend)
+    print('Tesselating height map')
+    triangle = IMG.matrixProcessTriangles(matrix[0], matrix[1], matrix[2])
+    print('Meshing processed image to generate a STL-file')
+    mesh = IMG.createSTLMesh(triangle[0], triangle[1])
 
 
-# Return requested key value
-# Input is the API-data and requested key
-# Checking that the value exists and is an integer
-def getCompanyValues(data, key):
-    try:
-        value = int(data['result'][0]['summaryDetail'][key]['raw'])
-    except ValueError:
-        print('The data is not an integer, and something is wrong')
-    else:
-        pass
-    return value
-
-
-############################
-########## STEP 4 ##########
-############################
-
-# Call function getTrend
-
-
-# Return yes or no if want to see the percentage trend.
-# Or can retrun the percentage diretly by calling the getTrend function if want to
-# NOT FINISHED
-def seeTrend():
-    print('Do you want to see the percentage change trend between the two compared values? yes or no?')
-    while True:
-        try:
-            ans = input('')
-        except ValueError:
-            print('please enter yes or no')
-            continue
-        else:
-            break
-    # return getTrend(value1, value2)
-    return ans
-    # This can be implemented to directly call the getTrend function if the answear is yes
-    # input in getTrend must be the key value from the getCompanyValue calls
-    # if ans == 'yes':
-    #    return getTrend(value1, value2)
-    # else:
-    #    pass
-
-
-if seeTrend == 'yes':
-    print(getTrend())
 else:
-    pass
+    # User choice
+    # API script
 
-############################
-########## STEP 5 ##########
-############################
+    print('Enter your preferred company ticker')
+    ticker = input('')
+    print('Gathering data from', ticker)
+    data = API.GetRichorDieTrying.getApiData(1, ticker)
+    print('First instrument')
+    key1 = AF.chooseKey(data)
+    print('Second instrument')
+    key2 = AF.chooseKey(data)
+    # Test input
+    if key1 == key2:
+        print('Try again.')
+        key2 = AF.chooseKey(data)
 
-print('Do you want to see the avaiable instrumental data from the company', ticker, '?', 'yes or no?')
-seeData = input('')
-# print(seeData)
 
-if seeData == 'yes':
-    fff = aaa.printData(bbb)
-elif seeData == 'no':
-    pass
-else:
-    print('Please enter "yes" or "no"')
+    print('Comparing', key1, 'and', key2)
+    value1 = API.GetRichorDieTrying.getCompanyValues(1, data, key1)
+    value2 = API.GetRichorDieTrying.getCompanyValues(1, data, key2)
+    trend = API.GetRichorDieTrying.getTrend(1, value1, value2)
+    print(key1,':', value1,',', key2,':', value2,',', 'percentage trend:', trend)
+
+    print('Do you want to see the collected company data? yes or no?')
+    seedata = AF.yesNo()
+    if seedata == 'yes':
+        API.GetRichorDieTrying.printData(1, data)
+
+
+    # STL script
+    updown = IMG.bullOrBear(trend)
+    print('The trend is', updown)
+    print('Greyscaling', updown, 'image')
+    grey = IMG.greyScaleImage(updown)
+    print('Generating height map using trend amplitude')
+    matrix = IMG.createImageMatrix(grey, trend)
+    print('Tesselating height map')
+    triangle = IMG.matrixProcessTriangles(matrix[0], matrix[1], matrix[2])
+    print('Meshing processed image to generate a STL-file')
+    mesh = IMG.createSTLMesh(triangle[0], triangle[1])
+
+print('The script finished successfully!')
+
+
 
 

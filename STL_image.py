@@ -4,11 +4,11 @@ import numpy as np
 from stl import mesh
 
 # Import the output percentage change from the new_api_scipt to use as the input in BullOrBear
-from new_api_script import d
+# from new_api_script import d
 
-print('2nd script')
-print(d)
-print('2nd script continues')
+
+
+
 # Return Bull or Bear
 # Choosing which image to process
 # Input is the output from the API-script
@@ -33,10 +33,11 @@ def greyScaleImage(input):
 # return xyz matrix to process "vertice","col" and "row"
 # Create a xyz matrix for image
 # Input is the greyscale image
-def createImageMatrix(imageInput):
+def createImageMatrix(imageInput, percentage):
     # create surface with 1000 x 5000 with N triangles
     max_size = (500, 500)
-    max_height = 20  # Maybe make the max height a dynamical changed parameter respected to the percentage outout from the stock
+    # Dynamically changing height of image from the trend
+    max_height = abs(percentage)
     min_height = 0
 
     # Thumbnail rescales image to a workable size
@@ -53,7 +54,7 @@ def createImageMatrix(imageInput):
     # Create a 3x3 matrix with zeroes
     vertice = np.zeros((row, col, 3))
 
-    for x in range(col):
+    for x in range(0, col):
         for y in range(0, row):
             pixelIntensity = imageNP[y][x]
             z = (pixelIntensity * max_height) / 229
@@ -103,13 +104,13 @@ def createSTLMesh(facesNPInput, facesInput):
 
     # Write the mesh to file "cube.stl"
     surface.save('image.stl')
-    return print("Saved STL-file as image.stl")
+    return print("Saved STL-file as image.stl successfully")
 
 #########################
 ####### TESTING #########
 #########################
-
-aaa = bullOrBear(2)
+'''
+aaa = bullOrBear(-2)
 print(aaa)
 bbb = greyScaleImage(aaa)
 print(bbb)
@@ -118,3 +119,4 @@ ccc = createImageMatrix(bbb)
 ddd = matrixProcessTriangles(ccc[0], ccc[1], ccc[2])
 # print(ddd)
 eee = createSTLMesh(ddd[0], ddd[1])
+'''

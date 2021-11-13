@@ -35,7 +35,6 @@ class GetRichorDieTrying:
             print('Data retrieved from yahoofinance!')
             # retrieved json-file
             data = file['quoteSummary']
-            print(data)
             return data
         else:
             print('Error! Returned status code %s' % response.status_code)
