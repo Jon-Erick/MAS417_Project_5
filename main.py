@@ -47,6 +47,7 @@ else:
     print('Gathering data from', ticker)
     data = API.GetRichorDieTrying.getApiData(1, ticker)
     test = data.get('result')
+    # Test for valid ticker
     if test == None:
         print('invalid ticker entered')
         quit()
