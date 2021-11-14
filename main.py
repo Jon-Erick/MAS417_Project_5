@@ -14,7 +14,8 @@ if default == 'yes':
 
     # API script
     print('Gathering data from Microsoft')
-    data = API.GetRichorDieTrying.getApiData(1,'MSFT')
+    ticker = 'MSFT'
+    data = API.GetRichorDieTrying.getApiData(1,ticker)
     print('Comparing day high and fifty day average values')
     value1 = API.GetRichorDieTrying.getCompanyValues(1, data, 'dayHigh')
     value2 = API.GetRichorDieTrying.getCompanyValues(1, data, 'fiftyDayAverage')
@@ -34,7 +35,7 @@ if default == 'yes':
     print('Tesselating height map')
     triangle = IMG.matrixProcessTriangles(matrix[0], matrix[1], matrix[2])
     print('Meshing processed image to generate a STL-file')
-    mesh = IMG.createSTLMesh(triangle[0], triangle[1])
+    mesh = IMG.createSTLMesh(triangle[0], triangle[1], ticker)
 
 
 else:
@@ -77,7 +78,7 @@ else:
     print('Tesselating height map')
     triangle = IMG.matrixProcessTriangles(matrix[0], matrix[1], matrix[2])
     print('Meshing processed image to generate a STL-file')
-    mesh = IMG.createSTLMesh(triangle[0], triangle[1])
+    mesh = IMG.createSTLMesh(triangle[0], triangle[1], ticker)
 
 print('The script finished successfully!')
 

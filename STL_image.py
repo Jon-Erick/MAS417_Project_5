@@ -91,12 +91,12 @@ def matrixProcessTriangles(verticeInput, colInput, rowInput):
 # Return meshed image as STL-file
 # inputs are facesNP and faces from the matrixProcessTriangles functions
 # CREATE STL FILE
-def createSTLMesh(facesNPInput, facesInput):
+def createSTLMesh(facesNPInput, facesInput, ticker):
     surface = mesh.Mesh(np.zeros(facesNPInput.shape[0], dtype = mesh.Mesh.dtype))
     for i, f in enumerate(facesInput):
         for j in range(3):
             surface.vectors[i][j] = facesNPInput[i][j]
 
     # Write the mesh to file "cube.stl"
-    surface.save('image.stl')
-    return print("Saved STL-file as image.stl successfully")
+    surface.save(ticker + '_image.stl')
+    return print('Saved', ticker,'STL-file as', ticker + '_image.stl successfully')
