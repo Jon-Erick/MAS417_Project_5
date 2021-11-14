@@ -29,7 +29,7 @@ def greyScaleImage(input):
 # Create a xyz matrix for image
 # Input is the greyscale image
 def createImageMatrix(imageInput, percentage):
-    # create surface with 1000 x 5000 with N triangles
+    # create surface with 500 x 500 with N triangles
     max_size = (500, 500)
     # Dynamically changing height of image from the trend
     max_height = abs(percentage)
