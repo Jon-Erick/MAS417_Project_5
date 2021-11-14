@@ -75,8 +75,8 @@ def matrixProcessTriangles(verticeInput, colInput, rowInput):
 
             # Create Face 2 triangle
             vertice1 = verticeInput[y][x]
-            vertice2 = verticeInput[y + 1][x]
-            vertice3 = verticeInput[y +1][x + 1]
+            vertice2 = verticeInput[y][x + 1]
+            vertice3 = verticeInput[y + 1][x + 1]
 
             face2 = np.array([vertice1, vertice2, vertice3])
 
