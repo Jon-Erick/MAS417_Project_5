@@ -38,8 +38,6 @@ class GetRichorDieTrying:
             return data
         else:
             print('Error! Returned status code %s' % response.status_code)
-            print('Message: %s' % file['error']['message'])
-            print('Reason: %s' % file['error']['reason'])
             quit()
 
     # Return requested key value
