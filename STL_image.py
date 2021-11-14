@@ -88,8 +88,8 @@ def matrixProcessTriangles(verticeInput, colInput, rowInput):
     return [facesNP, faces]
 
 
-# Return meshed image as STL-file
-# inputs are facesNP and faces from the matrixProcessTriangles functions
+# Return meshed image as STL-file with corresponding ticker name
+# inputs are facesNP and faces from the matrixProcessTriangles functions and ticker
 # CREATE STL FILE
 def createSTLMesh(facesNPInput, facesInput, ticker):
     surface = mesh.Mesh(np.zeros(facesNPInput.shape[0], dtype = mesh.Mesh.dtype))
