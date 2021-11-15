@@ -42,10 +42,10 @@ class GetRichorDieTrying:
 
     # Return requested key value
     # Input is the API-data and requested key
-    # Checking that the value exists and is an integer
+    # Checking that the value exists and is a float
     def getCompanyValues(self, data, key):
         try:
-            value = int(data['result'][0]['summaryDetail'][key]['raw'])
+            value = float(data['result'][0]['summaryDetail'][key]['raw'])
         except ValueError:
             print('The data is not an integer, and something is wrong')
         else:
