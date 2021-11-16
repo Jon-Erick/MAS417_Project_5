@@ -97,6 +97,6 @@ def createSTLMesh(facesNPInput, facesInput, ticker):
         for j in range(3):
             surface.vectors[i][j] = facesNPInput[i][j]
 
-    # Write the mesh to file "cube.stl"
+    # Write the mesh to file "ticker_image.stl"
     surface.save(ticker + '_image.stl')
     return print('Saved', ticker,'STL-file as', ticker + '_image.stl successfully')

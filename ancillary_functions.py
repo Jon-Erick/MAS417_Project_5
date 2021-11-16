@@ -1,6 +1,5 @@
 
 # Return yes or no as a string
-# ASK if user want to run a default procedure
 def yesNo():
     i = 1
     print('yes or no?')
@@ -20,7 +19,6 @@ def yesNo():
             print('Please enter yes or no')
             continue
         elif a == 'yes':
-            default = True
             break
         elif a == 'no':
             break
