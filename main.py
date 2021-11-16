@@ -43,7 +43,8 @@ else:
     # API script
 
     print('Enter your preferred company ticker from the New York Stock Exchange')
-    print('Suggestion for some tickers: Apple = AAPL, Microsoft = MSFT, Tesla = TSLA, Advanced Micro Devices = AMD, Amazon = AMZN, NVIDIA Corporation = NVDA, etc.')
+    print('Suggestion for some tickers: Apple = AAPL, Microsoft = MSFT, Tesla = TSLA')
+    print('Advanced Micro Devices = AMD, Amazon = AMZN, NVIDIA Corporation = NVDA, etc.')
     ticker = input('')
     print('Gathering data from', ticker)
     data = API.GetRichorDieTrying.getApiData(1, ticker)
