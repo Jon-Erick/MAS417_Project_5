@@ -47,11 +47,11 @@ class GetRichorDieTrying:
         try:
             value = float(data['result'][0]['summaryDetail'][key]['raw'])
         except ValueError:
-            print('ValueError. The data is not a numerical type, and something is wrong')
+            print('ValueError. The data is not a numerical type, and something is wrong.')
         except NameError:
-            print('NameError. Something is wrong')
+            print('NameError. Something is wrong.')
         except KeyError:
-            print('KeyError, The key is not valid')
+            print('KeyError, The key is empty.')
         else:
             pass
         return value
