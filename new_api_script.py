@@ -51,7 +51,7 @@ class GetRichorDieTrying:
         except NameError:
             print('NameError. Something is wrong')
         except KeyError:
-            print('KeyError, The key dis not valid')
+            print('KeyError, The key is not valid')
         else:
             pass
         return value
